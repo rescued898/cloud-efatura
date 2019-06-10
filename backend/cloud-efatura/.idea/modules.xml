@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cloud-efatura.iml" filepath="$PROJECT_DIR$/cloud-efatura.iml" />
+      <module fileurl="file://$PROJECT_DIR$/efatura-commons/efatura-commons.iml" filepath="$PROJECT_DIR$/efatura-commons/efatura-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/efatura-internal-service/efatura-internal-service.iml" filepath="$PROJECT_DIR$/efatura-internal-service/efatura-internal-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/efatura-isnet-integration/efatura-isnet-integration.iml" filepath="$PROJECT_DIR$/efatura-isnet-integration/efatura-isnet-integration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/efatura-oracle-cloud-integration/efatura-oracle-cloud-integration.iml" filepath="$PROJECT_DIR$/efatura-oracle-cloud-integration/efatura-oracle-cloud-integration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/efatura-scheduler-commons/efatura-scheduler-commons.iml" filepath="$PROJECT_DIR$/efatura-scheduler-commons/efatura-scheduler-commons.iml" />
+    </modules>
+  </component>
+</project>

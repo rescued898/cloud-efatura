@@ -1,0 +1,33 @@
+<jaxb:bindings version="2.1"
+               xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <jaxb:bindings
+            schemaLocation="http://einvoiceservicetest.isnet.net.tr/InvoiceService/ServiceContract/InvoiceService.svc?xsd=xsd2"
+            version="1.0">
+        <!-- rename the value element -->
+        <jaxb:bindings node="//xs:complexType[@name='Invoice']">
+            <jaxb:bindings node=".//xs:element[@name='DetailStatus']">
+                <jaxb:class name="DetailStatusElement"/>
+            </jaxb:bindings>
+            <jaxb:bindings node=".//xs:element[@name='Status']">
+                <jaxb:class name="StatusElement"/>
+            </jaxb:bindings>
+            <jaxb:bindings node=".//xs:element[@name='ReturnInvoiceNumber']">
+                <jaxb:class name="ReturnInvoiceNumberElement"/>
+            </jaxb:bindings>
+        </jaxb:bindings>
+
+        <jaxb:bindings node="//xs:complexType[@name='DespatchAdvice']">
+            <jaxb:bindings node=".//xs:element[@name='Shipment']">
+                <jaxb:class name="DespatchShipmentElement"/>
+            </jaxb:bindings>
+        </jaxb:bindings>
+
+        <jaxb:bindings node="//xs:complexType[@name='ReceiptAdvice']">
+            <jaxb:bindings node=".//xs:element[@name='Shipment']">
+                <jaxb:class name="ReceiptShipmentElement"/>
+            </jaxb:bindings>
+        </jaxb:bindings>
+    </jaxb:bindings>
+</jaxb:bindings>

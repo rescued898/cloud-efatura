@@ -1,0 +1,39 @@
+type Invoice {
+    uuid: ID!
+    invoiceNumber: String!
+    direction: String!
+    issueDate: String
+    documentCurrencyCode: String
+    lineExtensionAmount: Amount
+    accountingSupplierParty: Party
+    accountingCustomerParty: Party
+    processed: Boolean
+    integrationStatus: String
+}
+
+type Party {
+    partyIdentification: [Identification]!
+    partyName: String!
+}
+
+type Identification {
+    schemeID: String
+    value: String
+}
+
+type Amount {
+    amount: Float!
+    currencyCode: String!
+}
+
+type Query {
+    findAllInvoices: [Invoice]!
+    findInvoices(pageNumber: Int!, pageSize : Int!, sortOrder: SortOrder!, sortBy: String!): [Invoice]
+    searchInvoices(direction: String!, filter: String): [Invoice]
+    invoiceCount: Int
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}

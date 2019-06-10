@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/efatura-commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/efatura-internal-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/efatura-isnet-integration" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/efatura-oracle-cloud-integration" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/efatura-scheduler-commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test" charset="UTF-8" />
+  </component>
+</project>

@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+        name="InvoiceInterfaceService"
+        targetNamespace="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/"
+        xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+        xmlns:errors="http://xmlns.oracle.com/adf/svc/errors/"
+        xmlns:orafault="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0"
+        xmlns:tns="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:types="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/types/"
+>
+    <wsdl:documentation xmlns:oer="http://xmlns.oracle.com/oer">
+        <name>Payables Invoice</name>
+        <description>The commercial documents issued by suppliers to request payment at
+            agreed prices for products or services, or to record returns or
+            changes of such products or services.
+        </description>
+        <docCategories>
+            <category>Integration</category>
+        </docCategories>
+        <oer:lifecycle>Active</oer:lifecycle>
+        <oer:compatibility>Supported - Backward Compatibility Assured</oer:compatibility>
+        <keywords>
+            <value>Payables Standard Invoice</value>
+            <value>Payables Prepayment</value>
+            <value>Payables Debit Memo</value>
+            <value>Payables Credit Memo</value>
+        </keywords>
+        <oer:category name="lba">
+            <value>FinTop-Financial Products</value>
+            <value>FinTop-Financial Products : FinApTop-Payables</value>
+            <value>FinTop-Financial Products : FinApTop-Payables :
+                FinApInvCore-Invoices
+            </value>
+        </oer:category>
+        <oer:category name="lbo">
+            <value>FIN-Financials : AP-Payables : AP_INVOICE_CRM-Payables Credit
+                Memo
+            </value>
+            <value>FIN-Financials : AP-Payables : AP_INVOICE_PRE-Payables Prepayment</value>
+            <value>FIN-Financials : AP-Payables : AP_INVOICE_STD-Payables Standard
+                Invoice
+            </value>
+        </oer:category>
+        <oer:operation name="createInvoiceInterface">
+            <description>Create invoice into the invoice interface tables</description>
+            <oer:parameters>
+                <oer:parameter name="invoiceInterfaceHeader" description="Details of the invoice to be created"/>
+                <oer:return description="Details of the invoice created in the invoice interface tables"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="submitInvoiceImport">
+            <description>Submit the Invoice Import job to import invoices from the
+                invoice interface tables
+            </description>
+            <oer:parameters>
+                <oer:parameter name="ledgerId" description="Reporting Ledger that will be displayed in report output"/>
+                <oer:parameter name="orgId" description="Business Unit of invoices to be processed"/>
+                <oer:parameter name="importSet" description="Import set to be processed"/>
+                <oer:parameter name="groupName"
+                               description="Invoice Group that will be associated with the imported invoices"/>
+                <oer:parameter name="accountingDate"
+                               description="Accounting date to be used for all imported invoices"/>
+                <oer:parameter name="hold" description="Hold that will be placed on all imported invoices"/>
+                <oer:parameter name="holdReason"
+                               description="Hold Reason for the hold that will be placed on all imported invoices"/>
+                <oer:parameter name="summarizeReport"
+                               description="Control whether the report output from Invoice Import job will be summarized"/>
+                <oer:return description="Request ID of the submitted Invoice Import job"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="createB2BInvoice">
+            <description>Create B2B invoices into the invoice interface tables</description>
+            <oer:parameters>
+                <oer:parameter name="InvoiceInterfaceHeader" description="List of B2B invoices to be created"/>
+                <oer:return description="Return code and message from invoice service"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="updateInvoiceInterface">
+            <description>Update invoice in the invoice interface tables</description>
+            <oer:parameters>
+                <oer:parameter name="invoiceInterfaceHeader" description="Details of the invoice to be updated"/>
+                <oer:return description="Details of the invoice updated in the invoice interface tables"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="getInvoiceInterface">
+            <description>Query invoice in invoice interface tables by primary key</description>
+            <oer:parameters>
+                <oer:parameter name="invoiceId" description="Invoice ID"/>
+                <oer:parameter name="loadRequestId" description="Load Request ID"/>
+                <oer:return
+                        description="Invoice header, line and rejection information in the invoice interface tables"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="findInvoiceInterface">
+            <description>Query invoice in invoice interface tables by search criteria</description>
+            <oer:parameters>
+                <oer:parameter name="findCriteria" description="Search Criteria"/>
+                <oer:parameter name="findControl" description="Find Control"/>
+                <oer:return
+                        description="Invoice header, line and rejection information in the invoice interface tables"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="getSupplierRejections">
+            <description>Get the rejected supplier B2B invoices</description>
+            <oer:parameters>
+                <oer:parameter name="RequestId" description="Request Id of the rejected supplier B2B invoices"/>
+                <oer:parameter name="VendorEmailAddress"
+                               description="Vendor Email Address of the rejected supplier B2B invoices"/>
+                <oer:return
+                        description="Return the rejected B2B invoices corresponding to the request id and vendor email address combination"/>
+            </oer:parameters>
+        </oer:operation>
+        <oer:operation name="createInvoiceInterfaceWithAttachments">
+            <description>Creates invoices into the interface tables and inserts the
+                attachemnts into the UCM
+            </description>
+            <oer:parameters>
+                <oer:parameter name="invoiceInterfaceHeader" description="Invoice interface data"/>
+                <oer:parameter name="attachments" description="List of invoice attachment details"/>
+                <oer:return description="Return code and message from invoice service"/>
+            </oer:parameters>
+        </oer:operation>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="InvoiceInterfaceService">
+        <plnk:role name="InvoiceInterfaceServiceProvider">
+            <plnk:portType name="tns:InvoiceInterfaceService"/>
+        </plnk:role>
+        <plnk:role name="InvoiceInterfaceServiceRequestor">
+            <plnk:portType name="tns:InvoiceInterfaceServiceResponse"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceResponse_Fault_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"/>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceResponse_Input_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <sp:Body/>
+            <sp:Header Namespace="http://www.w3.org/2005/08/addressing"/>
+            <sp:Header Namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"/>
+            <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <sp:Body/>
+            <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+        </sp:EncryptedParts>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceResponse_Output_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <sp:Body/>
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <sp:Body/>
+        </sp:EncryptedParts>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceSoapHttpPort_Fault_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <wsp:ExactlyOne>
+            <wsp:All/>
+            <wsp:All/>
+            <wsp:All/>
+            <wsp:All/>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceSoapHttpPort_Input_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                    <sp:Header Name="SignatureConfirmation"
+                               Namespace="http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd"/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                    <sp:Header Name="SignatureConfirmation"
+                               Namespace="http://docs.oasis-open.org/wss/oasis-wss-wssecurity-secext-1.1.xsd"/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                    <sp:Header Name="fmw-context" Namespace="http://xmlns.oracle.com/fmw/context/1.0"/>
+                </sp:EncryptedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="InvoiceInterfaceServiceSoapHttpPort_Output_Policy"
+                xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:EncryptedParts>
+            </wsp:All>
+            <wsp:All>
+                <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:SignedParts>
+                <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <sp:Body/>
+                </sp:EncryptedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="wsaddr_policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"/>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="wss11_saml_or_username_token_with_message_protection_service_policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:ProtectionToken>
+                            <wsp:Policy>
+                                <sp:X509Token
+                                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:RequireThumbprintReference/>
+                                        <sp:WssX509V3Token11/>
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:ProtectionToken>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                        <sp:ProtectTokens/>
+                        <sp:OnlySignEntireHeadersAndBody/>
+                    </wsp:Policy>
+                </sp:SymmetricBinding>
+                <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:SamlToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssSamlV11Token11/>
+                            </wsp:Policy>
+                        </sp:SamlToken>
+                    </wsp:Policy>
+                </sp:SignedSupportingTokens>
+                <sp:EndorsingSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:X509Token
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssX509V3Token11/>
+                            </wsp:Policy>
+                        </sp:X509Token>
+                    </wsp:Policy>
+                </sp:EndorsingSupportingTokens>
+                <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:RequireSignatureConfirmation/>
+                        <sp:MustSupportRefEncryptedKey/>
+                    </wsp:Policy>
+                </sp:Wss11>
+            </wsp:All>
+            <wsp:All>
+                <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:ProtectionToken>
+                            <wsp:Policy>
+                                <sp:X509Token
+                                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:RequireThumbprintReference/>
+                                        <sp:WssX509V3Token11/>
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:ProtectionToken>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128Exn256/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                        <sp:ProtectTokens/>
+                        <sp:OnlySignEntireHeadersAndBody/>
+                    </wsp:Policy>
+                </sp:SymmetricBinding>
+                <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:SamlToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssSamlV11Token11/>
+                            </wsp:Policy>
+                        </sp:SamlToken>
+                    </wsp:Policy>
+                </sp:SignedSupportingTokens>
+                <sp:EndorsingSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:X509Token
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssX509V3Token11/>
+                            </wsp:Policy>
+                        </sp:X509Token>
+                    </wsp:Policy>
+                </sp:EndorsingSupportingTokens>
+                <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:RequireSignatureConfirmation/>
+                        <sp:MustSupportRefEncryptedKey/>
+                    </wsp:Policy>
+                </sp:Wss11>
+            </wsp:All>
+            <wsp:All>
+                <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:ProtectionToken>
+                            <wsp:Policy>
+                                <sp:X509Token
+                                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:RequireThumbprintReference/>
+                                        <sp:WssX509V3Token11/>
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:ProtectionToken>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                        <sp:OnlySignEntireHeadersAndBody/>
+                    </wsp:Policy>
+                </sp:SymmetricBinding>
+                <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:UsernameToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssUsernameToken10/>
+                            </wsp:Policy>
+                        </sp:UsernameToken>
+                    </wsp:Policy>
+                </sp:SignedSupportingTokens>
+                <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:RequireSignatureConfirmation/>
+                        <sp:MustSupportRefEncryptedKey/>
+                    </wsp:Policy>
+                </sp:Wss11>
+            </wsp:All>
+            <wsp:All>
+                <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:ProtectionToken>
+                            <wsp:Policy>
+                                <sp:X509Token
+                                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:RequireThumbprintReference/>
+                                        <sp:WssX509V3Token11/>
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:ProtectionToken>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128Exn256/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                        <sp:OnlySignEntireHeadersAndBody/>
+                    </wsp:Policy>
+                </sp:SymmetricBinding>
+                <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:UsernameToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssUsernameToken10/>
+                            </wsp:Policy>
+                        </sp:UsernameToken>
+                    </wsp:Policy>
+                </sp:SignedSupportingTokens>
+                <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:RequireSignatureConfirmation/>
+                        <sp:MustSupportRefEncryptedKey/>
+                    </wsp:Policy>
+                </sp:Wss11>
+            </wsp:All>
+            <wsp:All>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false">
+                                    <wsp:Policy/>
+                                </sp:HttpsToken>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+                <sp:SupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:SamlToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssSamlV11Token10/>
+                            </wsp:Policy>
+                        </sp:SamlToken>
+                    </wsp:Policy>
+                </sp:SupportingTokens>
+            </wsp:All>
+            <wsp:All>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false">
+                                    <wsp:Policy/>
+                                </sp:HttpsToken>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+                <sp:SupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:SamlToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssSamlV20Token11/>
+                            </wsp:Policy>
+                        </sp:SamlToken>
+                    </wsp:Policy>
+                </sp:SupportingTokens>
+            </wsp:All>
+            <wsp:All>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false">
+                                    <wsp:Policy/>
+                                </sp:HttpsToken>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+                <sp:SupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:UsernameToken
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssUsernameToken10/>
+                            </wsp:Policy>
+                        </sp:UsernameToken>
+                    </wsp:Policy>
+                </sp:SupportingTokens>
+            </wsp:All>
+            <wsp:All>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false">
+                                    <wsp:Policy/>
+                                </sp:HttpsToken>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+            </wsp:All>
+            <wsp:All>
+                <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+                    <wsp:Policy>
+                        <sp:TransportToken>
+                            <wsp:Policy>
+                                <sp:HttpsToken RequireClientCertificate="false">
+                                    <wsp:Policy>
+                                        <osp:HttpJwtAuthentication
+                                                xmlns:osp="http://schemas.oracle.com/ws/2012/01/wssecuritypolicy"/>
+                                    </wsp:Policy>
+                                </sp:HttpsToken>
+                            </wsp:Policy>
+                        </sp:TransportToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Lax/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                    </wsp:Policy>
+                </sp:TransportBinding>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                wsu:Id="wss11_saml_token_with_message_protection_client_policy">
+        <sp:SymmetricBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <wsp:Policy>
+                <sp:ProtectionToken>
+                    <wsp:Policy>
+                        <sp:X509Token
+                                sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                            <wsp:Policy>
+                                <sp:RequireThumbprintReference/>
+                                <sp:WssX509V3Token11/>
+                            </wsp:Policy>
+                        </sp:X509Token>
+                    </wsp:Policy>
+                </sp:ProtectionToken>
+                <sp:AlgorithmSuite>
+                    <wsp:Policy>
+                        <sp:Basic128/>
+                    </wsp:Policy>
+                </sp:AlgorithmSuite>
+                <sp:Layout>
+                    <wsp:Policy>
+                        <sp:Lax/>
+                    </wsp:Policy>
+                </sp:Layout>
+                <sp:IncludeTimestamp/>
+                <sp:ProtectTokens/>
+                <sp:OnlySignEntireHeadersAndBody/>
+            </wsp:Policy>
+        </sp:SymmetricBinding>
+        <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <wsp:Policy>
+                <sp:SamlToken
+                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                    <wsp:Policy>
+                        <sp:WssSamlV11Token11/>
+                    </wsp:Policy>
+                </sp:SamlToken>
+            </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:EndorsingSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <wsp:Policy>
+                <sp:X509Token
+                        sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                    <wsp:Policy>
+                        <sp:WssX509V3Token11/>
+                    </wsp:Policy>
+                </sp:X509Token>
+            </wsp:Policy>
+        </sp:EndorsingSupportingTokens>
+        <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+            <wsp:Policy>
+                <sp:RequireSignatureConfirmation/>
+                <sp:MustSupportRefEncryptedKey/>
+            </wsp:Policy>
+        </sp:Wss11>
+    </wsp:Policy>
+    <wsdl:import namespace="http://xmlns.oracle.com/adf/svc/errors/"
+                 location="https://ejwy-test.fa.em2.oraclecloud.com:443/fscmService/InvoiceInterfaceService?WSDL=/META-INF/wsdl/ServiceException.wsdl"/>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0"
+                    schemaLocation="https://ejwy-test.fa.em2.oraclecloud.com:443/fscmService/InvoiceInterfaceService?XSD=/META-INF/oracle-webservices-async-fault-11_0.xsd"/>
+            <import namespace="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/types/"
+                    schemaLocation="https://ejwy-test.fa.em2.oraclecloud.com:443/fscmService/InvoiceInterfaceService?XSD=/oracle/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/InvoiceInterfaceService.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="InvoiceInterfaceService_onFault">
+        <wsdl:part name="parameters" element="orafault:Fault"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceAsyncResponse">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_submitInvoiceImportAsyncResponse">
+        <wsdl:part name="parameters" element="types:submitInvoiceImportAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createB2BInvoiceAsyncResponse">
+        <wsdl:part name="parameters" element="types:createB2BInvoiceAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_updateInvoiceInterfaceAsyncResponse">
+        <wsdl:part name="parameters" element="types:updateInvoiceInterfaceAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getInvoiceInterfaceAsyncResponse">
+        <wsdl:part name="parameters" element="types:getInvoiceInterfaceAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_findInvoiceInterfaceAsyncResponse">
+        <wsdl:part name="parameters" element="types:findInvoiceInterfaceAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getSupplierRejectionsAsyncResponse">
+        <wsdl:part name="parameters" element="types:getSupplierRejectionsAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsAsyncResponse">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceWithAttachmentsAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterface">
+        <wsdl:part name="parameters" element="types:createInvoiceInterface"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceResponse">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceAsync">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_submitInvoiceImport">
+        <wsdl:part name="parameters" element="types:submitInvoiceImport"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_submitInvoiceImportResponse">
+        <wsdl:part name="parameters" element="types:submitInvoiceImportResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_submitInvoiceImportAsync">
+        <wsdl:part name="parameters" element="types:submitInvoiceImportAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createB2BInvoice">
+        <wsdl:part name="parameters" element="types:createB2BInvoice"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createB2BInvoiceResponse">
+        <wsdl:part name="parameters" element="types:createB2BInvoiceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createB2BInvoiceAsync">
+        <wsdl:part name="parameters" element="types:createB2BInvoiceAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_updateInvoiceInterface">
+        <wsdl:part name="parameters" element="types:updateInvoiceInterface"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_updateInvoiceInterfaceResponse">
+        <wsdl:part name="parameters" element="types:updateInvoiceInterfaceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_updateInvoiceInterfaceAsync">
+        <wsdl:part name="parameters" element="types:updateInvoiceInterfaceAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getInvoiceInterface">
+        <wsdl:part name="parameters" element="types:getInvoiceInterface"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getInvoiceInterfaceResponse">
+        <wsdl:part name="parameters" element="types:getInvoiceInterfaceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_findInvoiceInterface">
+        <wsdl:part name="parameters" element="types:findInvoiceInterface"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_findInvoiceInterfaceResponse">
+        <wsdl:part name="parameters" element="types:findInvoiceInterfaceResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getInvoiceInterfaceAsync">
+        <wsdl:part name="parameters" element="types:getInvoiceInterfaceAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_findInvoiceInterfaceAsync">
+        <wsdl:part name="parameters" element="types:findInvoiceInterfaceAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getSupplierRejectionsAsync">
+        <wsdl:part name="parameters" element="types:getSupplierRejectionsAsync"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getSupplierRejections">
+        <wsdl:part name="parameters" element="types:getSupplierRejections"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_getSupplierRejectionsResponse">
+        <wsdl:part name="parameters" element="types:getSupplierRejectionsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceWithAttachments">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceWithAttachments"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsResponse">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceWithAttachmentsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsAsync">
+        <wsdl:part name="parameters" element="types:createInvoiceInterfaceWithAttachmentsAsync"/>
+    </wsdl:message>
+    <wsdl:portType name="InvoiceInterfaceServiceResponse">
+        <wsdl:operation name="onFault">
+            <wsdl:input message="tns:InvoiceInterfaceService_onFault"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0/Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterfaceAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImportAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_submitInvoiceImportAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/submitInvoiceImportAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoiceAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_createB2BInvoiceAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createB2BInvoiceAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterfaceAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_updateInvoiceInterfaceAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/updateInvoiceInterfaceAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterfaceAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_getInvoiceInterfaceAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getInvoiceInterfaceAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterfaceAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_findInvoiceInterfaceAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/findInvoiceInterfaceAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejectionsAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_getSupplierRejectionsAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getSupplierRejectionsAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachmentsAsyncResponse">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsAsyncResponse"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceWithAttachmentsAsyncResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="InvoiceInterfaceService">
+        <wsdl:documentation>
+            <ViewInstance xmlns="http://xmlns.oracle.com/adf/svc/metadata/" Name="InvoiceInterfaceHeader"
+                          SDOName="tns:InvoiceInterfaceHeader" CreateOpName="createInvoiceInterface"
+                          UpdateOpName="updateInvoiceInterface" GetOpName="getInvoiceInterface"
+                          FindOpName="findInvoiceInterface"/>
+            UpdateOpName=&quot;updateInvoiceInterface&quot;/&gt;
+        </wsdl:documentation>
+        <wsdl:operation name="createInvoiceInterface">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterface"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_createInvoiceInterfaceResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterfaceAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImport">
+            <wsdl:input message="tns:InvoiceInterfaceService_submitInvoiceImport"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_submitInvoiceImportResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImportAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_submitInvoiceImportAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/submitInvoiceImportAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoice">
+            <wsdl:input message="tns:InvoiceInterfaceService_createB2BInvoice"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_createB2BInvoiceResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoiceAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_createB2BInvoiceAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createB2BInvoiceAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterface">
+            <wsdl:input message="tns:InvoiceInterfaceService_updateInvoiceInterface"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_updateInvoiceInterfaceResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterfaceAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_updateInvoiceInterfaceAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/updateInvoiceInterfaceAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterface">
+            <wsdl:input message="tns:InvoiceInterfaceService_getInvoiceInterface"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_getInvoiceInterfaceResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterface">
+            <wsdl:input message="tns:InvoiceInterfaceService_findInvoiceInterface"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_findInvoiceInterfaceResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterfaceAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_getInvoiceInterfaceAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getInvoiceInterfaceAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterfaceAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_findInvoiceInterfaceAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/findInvoiceInterfaceAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejectionsAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_getSupplierRejectionsAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getSupplierRejectionsAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejections">
+            <wsdl:input message="tns:InvoiceInterfaceService_getSupplierRejections"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_getSupplierRejectionsResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachments">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterfaceWithAttachments"/>
+            <wsdl:output message="tns:InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachmentsAsync">
+            <wsdl:input message="tns:InvoiceInterfaceService_createInvoiceInterfaceWithAttachmentsAsync"
+                        xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                        ns1:Action="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceWithAttachmentsAsync"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="InvoiceInterfaceServiceResponseBinding" type="tns:InvoiceInterfaceServiceResponse">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                             URI="#wss11_saml_token_with_message_protection_client_policy" wsdl:required="false"/>
+        <wsdl:operation name="onFault">
+            <soap:operation soapAction="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0/Fault"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImportAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/submitInvoiceImportAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoiceAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createB2BInvoiceAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterfaceAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/updateInvoiceInterfaceAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterfaceAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getInvoiceInterfaceAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterfaceAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/findInvoiceInterfaceAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejectionsAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getSupplierRejectionsAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachmentsAsyncResponse">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceWithAttachmentsAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceResponse_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="InvoiceInterfaceServiceSoapHttp" type="tns:InvoiceInterfaceService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                             URI="#wss11_saml_or_username_token_with_message_protection_service_policy"
+                             wsdl:required="false"/>
+        <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" URI="#wsaddr_policy"
+                             wsdl:required="false"/>
+        <wsdl:operation name="createInvoiceInterface">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterface"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImport">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/submitInvoiceImport"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="submitInvoiceImportAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/submitInvoiceImportAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoice">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createB2BInvoice"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="createB2BInvoiceAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createB2BInvoiceAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterface">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/updateInvoiceInterface"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateInvoiceInterfaceAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/updateInvoiceInterfaceAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterface">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getInvoiceInterface"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterface">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/findInvoiceInterface"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getInvoiceInterfaceAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getInvoiceInterfaceAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findInvoiceInterfaceAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/findInvoiceInterfaceAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejectionsAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getSupplierRejectionsAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSupplierRejections">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/getSupplierRejections"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachments">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceWithAttachments"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Output_Policy" wsdl:required="false"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Fault_Policy" wsdl:required="false"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="createInvoiceInterfaceWithAttachmentsAsync">
+            <soap:operation
+                    soapAction="http://xmlns.oracle.com/apps/financials/payables/invoices/quickInvoices/invoiceInterfaceService/createInvoiceInterfaceWithAttachmentsAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                     URI="#InvoiceInterfaceServiceSoapHttpPort_Input_Policy" wsdl:required="false"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="InvoiceInterfaceService">
+        <wsdl:port name="InvoiceInterfaceServiceSoapHttpPort" binding="tns:InvoiceInterfaceServiceSoapHttp">
+            <soap:address location="https://ejwy-test.fa.em2.oraclecloud.com:443/fscmService/InvoiceInterfaceService"/>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                    https://ejwy-test.fa.em2.oraclecloud.com:443/fscmService/InvoiceInterfaceService
+                </wsa:Address>
+                <wsid:Identity xmlns:wsid="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+                    <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+                        <dsig:X509Data>
+                            <dsig:X509Certificate>
+                                MIIDVzCCAj+gAwIBAgIIQ2Zs1iQtHikwDQYJKoZIhvcNAQELBQAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEWMBQGCgmSJomT8ixkARkWBm9yYWNsZTEVMBMGCgmSJomT8ixkARkWBWNsb3VkMRMwEQYDVQQDEwpDbG91ZDlDQS0yMB4XDTE2MDUyMDE4MjcxN1oXDTI2MDUxODE4MjcxN1owWzETMBEGCgmSJomT8ixkARkWA2NvbTEWMBQGCgmSJomT8ixkARkWBm9yYWNsZTEVMBMGCgmSJomT8ixkARkWBWNsb3VkMRUwEwYDVQQDEwxGQUVuY3J5cHRpb24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCz/rPJp0ei7zcswc+WJOSdobHhwOW7YcHrWNzXyq0DRm+528vE1w2PoEs6gScOUYhY6525P9BzRszZrdxTz5LqPUZlomD4cc3LTWtxGHvxNK9oYCtg3ss+DqJYzQf0zLTqkRpLFaJXMkHWqxtxYqFh7yj9yfgCCL0sZlWbIqqAq2mYLJNJch6jKTZCYjUNyY6/YCC/6gOwE/c8z/ZT6X9pPiehj7pgSfmNd7LXDRwx/TUA9eKt7EfDCiYpijgQ+Gr4OYhIa6dwLjWijyJJ82seKEEX8CXk3sUzDnpy7fOWOIE5k3r1fymtcAh3Dc9hLv7pyxV9OR0tWYZAez37jdBhAgMBAAGjITAfMB0GA1UdDgQWBBQha+Q04VrbObR43NfXveRJ0Pv8ITANBgkqhkiG9w0BAQsFAAOCAQEAbrwc2U3VKdx79Xa/dwhxnPXgNGamh6XkoRfCEHQluY00ifVhpkF1jB+xiuupnZu9Zyn7I+iwQ+2OG9MRry7Lx9eIsp546u3ov7LYhhWlp0ENBxI1rbPVQfJ8lIV6+czcPKobuZlz84QuaIAMsdyT+7dW35I/Gjv+yEpBuKh/EAfiv+V06c4c3/QqaIKKfKeFT3tHoxfnw7pkwIvB29Mz/6mXmF4TTGecewtIgO1PqxEWuKE0JrVyglID0RZf9uonYqSdBi19pK1gSTUNDQ28h6dd/N4C4lvrww0Kfmf92C2o9NnCPesoW7UCXbKyjBxZlVJ/Wi2zXp0dBMXCYKcFkw==
+                            </dsig:X509Certificate>
+                            <dsig:X509IssuerSerial>
+                                <dsig:X509IssuerName>CN=Cloud9CA-2, DC=cloud, DC=oracle, DC=com</dsig:X509IssuerName>
+                                <dsig:X509SerialNumber>4856688915151396393</dsig:X509SerialNumber>
+                            </dsig:X509IssuerSerial>
+                            <dsig:X509SubjectName>CN=FAEncryption, DC=cloud, DC=oracle, DC=com</dsig:X509SubjectName>
+                            <dsig:X509SKI>IWvkNOFa2zm0eNzX173kSdD7/CE=</dsig:X509SKI>
+                            <dsig:X509Certificate>
+                                MIIDazCCAlOgAwIBAgIIKIj1zaMy71MwDQYJKoZIhvcNAQELBQAwWTETMBEGCgmSJomT8ixkARkWA2NvbTEWMBQGCgmSJomT8ixkARkWBm9yYWNsZTEVMBMGCgmSJomT8ixkARkWBWNsb3VkMRMwEQYDVQQDEwpDbG91ZDlDQS0yMCAXDTE2MDUyMDE4MjcxNloYDzIxMTYwNDI2MTgyNzE2WjBZMRMwEQYKCZImiZPyLGQBGRYDY29tMRYwFAYKCZImiZPyLGQBGRYGb3JhY2xlMRUwEwYKCZImiZPyLGQBGRYFY2xvdWQxEzARBgNVBAMTCkNsb3VkOUNBLTIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCw2ma9qnNv+g6QSINgQLrHo36PG3WUVMmQEibv14/tdhZP0PZnd5QYbm+OxO3dsouir7Ec8BLyi2qTZQrmQ2Irdio/YnULjvoVaBc/9su/0VQlf8kKz9eXfJUs85WNCTpRwqB/mVgTb7OzbcuvuXU0l2qfCtElmIoK9LHs6xxkM09BdQPX1rRXhV46GqBw93lrUJoowtzmuQoSLa9CSx/t73VX7HlJN/hxYqmzcu0dKUKuOSn7bfuto8CBr1NQxDZxOsvri73MqS/TFhXzxOpPcXWeuwapqtFKY8hVo5iLldjQBpixacXiCmPoc9n+qo2AZyH2pRD2+ZAp5Qd5j/FvAgMBAAGjNTAzMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFAuakC7JeLoxJfXhiAc/vLP3/qYpMA0GCSqGSIb3DQEBCwUAA4IBAQCftYaPZLkkuw/FyfO38B2CiDC87q9mLoRiIkqWTJAiV0x3mtIIl/tHte/sVeYDgO16XN0QCvOhBSUHCG+VNyXETLKMgeC2J3NDyA0ik9e6UqL5KM8yVgT34x6YvNYB9Ek+ACw1/tOV8SH2QayJXTf0Fl6eYzJLnAfWxKLc4nim2uBuhUe0VxFNKOwyIx/n1JzIfThZXIaCT9ypa7ZU1ynButyhmA1PKNHi5UNwFQWEeqVrvOuVqCuFGDwTbgYPCjwLd1qD/5vF90khIw5/rFw1V6me1dmkBd/lm+td9dCR7no4MqI2TSwhTe4b3yIx7bDCzVxqhYqXPUNDra9a6Tdl
+                            </dsig:X509Certificate>
+                        </dsig:X509Data>
+                    </dsig:KeyInfo>
+                </wsid:Identity>
+            </wsa:EndpointReference>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
