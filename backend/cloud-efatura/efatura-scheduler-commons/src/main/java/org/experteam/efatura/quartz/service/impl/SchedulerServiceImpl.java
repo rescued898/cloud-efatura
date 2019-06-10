@@ -37,9 +37,12 @@ public class SchedulerServiceImpl implements SchedulerService {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
 
             JobDetail jobDetail = JobBuilder.newJob((Class<? extends QuartzJobBean>) Class.forName(jobInfo.getJobClass()))
-                    .setJobData(jobInfo.getJobDataMap())
                     .withIdentity(jobInfo.getJobName(), jobInfo.getJobGroup())
                     .build();
+
+            if (jobInfo.getJobDataMap() != null)
+                jobDetail.getJobBuilder().setJobData(jobInfo.getJobDataMap());
+
             if (!scheduler.checkExists(jobDetail.getKey())) {
                 jobDetail = scheduleCreator.createJob((Class<? extends QuartzJobBean>) Class.forName(jobInfo.getJobClass()),
                         false, context, jobInfo.getJobName(), jobInfo.getJobGroup(), jobInfo.getJobDataMap());
