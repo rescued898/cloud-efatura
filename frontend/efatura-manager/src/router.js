@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import requireAuth from './helpers/requireAuth';
 import localStorageService from './helpers/localStorage';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     mode: 'history',
