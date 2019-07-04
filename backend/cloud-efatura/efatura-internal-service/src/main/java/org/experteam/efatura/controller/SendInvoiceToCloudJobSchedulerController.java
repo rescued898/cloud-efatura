@@ -1,9 +1,9 @@
-package org.experteam.efatura.cloud.oracle.controller;
+package org.experteam.efatura.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.experteam.efatura.cloud.oracle.job.SendInvoiceToCloudJob;
-import org.experteam.efatura.cloud.oracle.payload.CloudResponse;
-import org.experteam.efatura.cloud.oracle.payload.SendInvoiceToCloudRequest;
+import org.experteam.efatura.job.SendInvoiceToCloudJob;
+import org.experteam.efatura.payload.CloudResponse;
+import org.experteam.efatura.payload.SendInvoiceToCloudRequest;
 import org.experteam.efatura.quartz.domain.SchedulerJobInfo;
 import org.experteam.efatura.quartz.service.SchedulerService;
 import org.quartz.JobDataMap;
@@ -35,7 +35,7 @@ public class SendInvoiceToCloudJobSchedulerController {
 
             SchedulerJobInfo jobInfo = SchedulerJobInfo.builder()
                     .id(UUID.randomUUID().toString())
-                    .jobClass("org.experteam.efatura.cloud.oracle.job.SendInvoiceToCloudJob")
+                    .jobClass("org.experteam.efatura.job.SendInvoiceToCloudJob")
                     .jobName("send-invoice-to-cloud")
                     .jobGroup("efatura-cloud-jobs")
                     .cronJob(false)

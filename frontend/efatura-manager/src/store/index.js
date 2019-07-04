@@ -10,6 +10,9 @@ export default new Vuex.Store({
     modules: {
         auth
     },
+    // Making sure that we're doing
+    // everything correctly by enabling
+    // strict mode in the dev environment.
     strict: debug
     // plugins: debug ? [createLogger()] : []
 });

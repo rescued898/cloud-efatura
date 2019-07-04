@@ -31,6 +31,18 @@
         </dependency>
 
         <dependency>
+            <groupId>org.experteam.efatura</groupId>
+            <artifactId>efatura-scheduler-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.experteam.efatura</groupId>
+            <artifactId>efatura-oracle-cloud-integration</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -52,7 +64,6 @@
             <artifactId>graphql-java-tools</artifactId>
             <version>${graphql-java-tools.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,4 +1,4 @@
-package org.experteam.efatura.cloud.oracle.payload;
+package org.experteam.efatura.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

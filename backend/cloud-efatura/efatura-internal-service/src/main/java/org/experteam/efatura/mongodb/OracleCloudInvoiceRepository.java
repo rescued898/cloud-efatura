@@ -1,4 +1,4 @@
-package org.experteam.efatura.cloud.oracle.repository.mongodb;
+package org.experteam.efatura.mongodb;
 
 import org.experteam.efatura.cloud.oracle.domain.OracleCloudInvoice;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -96,7 +96,7 @@
                      * Storing data in localstorage
                      * Assuming data coming from backend
                      */
-                    const token = 'hello-vuetiyf';
+                    const token = 'hello-vuetify';
                     const user = {
                         username: this.user.username
                     };

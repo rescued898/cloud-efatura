@@ -1,8 +1,8 @@
-package org.experteam.efatura.cloud.oracle.job;
+package org.experteam.efatura.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.experteam.efatura.cloud.oracle.domain.OracleCloudInvoice;
-import org.experteam.efatura.cloud.oracle.repository.mongodb.OracleCloudInvoiceRepository;
+import org.experteam.efatura.mongodb.OracleCloudInvoiceRepository;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

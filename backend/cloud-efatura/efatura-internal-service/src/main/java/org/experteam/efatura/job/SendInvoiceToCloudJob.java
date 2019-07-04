@@ -1,9 +1,8 @@
-package org.experteam.efatura.cloud.oracle.job;
+package org.experteam.efatura.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.experteam.efatura.cloud.oracle.domain.*;
-import org.experteam.efatura.cloud.oracle.repository.mongodb.OracleCloudInvoiceRepository;
 import org.experteam.efatura.cloud.oracle.rest.EfaturaConfigClient;
 import org.experteam.efatura.cloud.oracle.rest.SupplierClient;
 import org.experteam.efatura.cloud.oracle.rest.SupplierSiteClient;
@@ -11,6 +10,7 @@ import org.experteam.efatura.cloud.oracle.service.impl.InvoiceServiceImpl;
 import org.experteam.efatura.cloud.oracle.service.impl.ReportServiceImpl;
 import org.experteam.efatura.domain.Identification;
 import org.experteam.efatura.domain.IntgStatus;
+import org.experteam.efatura.mongodb.OracleCloudInvoiceRepository;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
