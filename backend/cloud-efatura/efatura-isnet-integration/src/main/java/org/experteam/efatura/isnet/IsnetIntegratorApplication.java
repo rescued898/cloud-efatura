@@ -36,13 +36,13 @@ public class IsnetIntegratorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        mongoRepository.deleteAll();
+        // mongoRepository.deleteAll();
 
         String companyTaxCode = "1234567805";
         String endpointUrl = "http://einvoiceservicetest.isnet.net.tr/InvoiceService/ServiceContract/InvoiceService.svc";
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Date invoiceDate = sdf.parse("29-01-2019");
+        Date invoiceDate = sdf.parse("29-03-2019");
 
         List<BaseInvoice> baseInvoices = invoiceService.getInvoices(endpointUrl, companyTaxCode, invoiceDate);
         for (BaseInvoice invoice : baseInvoices) {
@@ -53,11 +53,11 @@ public class IsnetIntegratorApplication implements CommandLineRunner {
             mongoRepository.save(invoice);
         }
 
-        log.info("Invoices found with findAll():");
+        /*log.info("Invoices found with findAll():");
         log.info("-------------------------------");
         for (BaseInvoice invoice : mongoRepository.findAll()) {
             log.info(invoice.toString());
-        }
+        }*/
     }
 
 }
